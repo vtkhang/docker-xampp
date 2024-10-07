@@ -1,21 +1,24 @@
 services:
   php:
-    build: './php/'
+    build: "./php/"
     restart: always
     volumes:
       - ./www/:/var/www/html/
       - ./php/config/php.ini-production:/usr/local/etc/php/php.ini
-  
+      - $HOME:$HOME
+
   apache:
-    build: './apache/'
+    build: "./apache/"
     restart: always
     depends_on:
       - php
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./www/:/var/www/html/
-  
+      - $HOME:$HOME
+
   mysql:
     image: mysql:8.0.39-debian
     restart: always
@@ -23,7 +26,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysqldata:/var/lib/mysql
-  
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
@@ -34,16 +37,16 @@ services:
       UPLOAD_LIMIT: ${UPLOAD_LIMIT}
     depends_on:
       - mysql
-  
+
   mailhog:
     image: mailhog/mailhog
     restart: always
     ports:
       - 1025:1025
       - 8025:8025
-  
+
   pocketbase:
-    build: './pocketbase'
+    build: "./pocketbase"
     restart: always
     ports:
       - 8090:8090

@@ -1,0 +1,1 @@
+mkcert -cert-file server.crt -key-file private.key localhost 192.168.0.88
